@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfDatabase.MainDs;
 
 namespace WpfDatabase
 {
@@ -83,9 +84,21 @@ namespace WpfDatabase
             this.employee_InfoDataGrid.IsEnabled = true;
         }
 
+
         private void new_btn_Click(object sender, RoutedEventArgs e)
         {
             new_edit_del_btns();
+
+            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+
+            System.Data.DataRow dr;
+            dr = employeesDs.Employee_Info.NewEmployee_InfoRow();
+            employeesDs.Employee_Info.Rows.Add(dr);
+
+            System.Windows.Data.CollectionViewSource employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
+            employee_InfoViewSource.View.MoveCurrentToLast();
+            this.employee_InfoDataGrid.ScrollIntoView(employee_InfoViewSource.View.CurrentItem);
+
         }
 
         private void edit_btn_Click(object sender, RoutedEventArgs e)
@@ -93,19 +106,41 @@ namespace WpfDatabase
             new_edit_del_btns();
         }
 
+
         private void delete_btn_Click(object sender, RoutedEventArgs e)
         {
             new_edit_del_btns();
+
+            System.Windows.Data.CollectionViewSource employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
+            System.Data.DataRowView drv;
+            drv = (System.Data.DataRowView)employee_InfoViewSource.View.CurrentItem;
+
+            drv.Delete();
         }
+
 
         private void save_btn_Click(object sender, RoutedEventArgs e)
         {
             save_return_btns();
+
+            WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter employeesDsEmployee_InfoTableAdapter = new WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter();
+
+            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+            Int32 rv;
+            rv = employeesDsEmployee_InfoTableAdapter.Update(employeesDs.Employee_Info); //(INSERT)
+            if(rv > 0)
+                MessageBox.Show("Changed Saved to Database", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            else
+                MessageBox.Show("Error Saving Data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
 
         private void return_btn_Click(object sender, RoutedEventArgs e)
         {
             save_return_btns();
+
+            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+            employeesDs.RejectChanges();
         }
     }
 }

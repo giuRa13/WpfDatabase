@@ -42,7 +42,7 @@
                 <RowDefinition Height="80*"/>
             </Grid.RowDefinitions>
             <GroupBox x:Name="group_box_right" Grid.Column="1" Grid.Row="1" Margin="10,0,10,5" Header="Table" FontSize="16" BorderBrush="{DynamicResource my_blue}" BorderThickness="2,2,2,2">
-            <DataGrid x:Name="employee_InfoDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.Column="1" Margin="10" Grid.Row="1" HorizontalContentAlignment="Stretch" IsHitTestVisible="True" BorderBrush="{DynamicResource my_red}" BorderThickness="2,2,2,2">
+            <DataGrid x:Name="employee_InfoDataGrid" AutoGenerateColumns="False" EnableRowVirtualization="True" ItemsSource="{Binding}" RowDetailsVisibilityMode="VisibleWhenSelected" Grid.Column="1" Margin="10" Grid.Row="1" HorizontalContentAlignment="Stretch" IsHitTestVisible="True" BorderBrush="{DynamicResource my_red}" BorderThickness="2,2,2,2" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="idColumn" Binding="{Binding Id}" Header="Id" IsReadOnly="True" Width="SizeToHeader"/>
                 <DataGridTextColumn x:Name="firstNameColumn" Binding="{Binding FirstName}" Header="First Name" Width="SizeToHeader"/>
