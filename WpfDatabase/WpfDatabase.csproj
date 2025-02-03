@@ -114,9 +114,52 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="solid--database.png">
+    <Resource Include="icons\solid--database.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="solid--database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\new.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\save-line.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\edit-outline.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\delete-1.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="save-line.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="delete-1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="edit-outline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\rollback.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="rollback.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
