@@ -26,16 +26,29 @@ namespace WpfDatabase
             InitializeComponent();
         }
 
+        WpfDatabase.MainDs.EmployeesDs employeesDs;
+        WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter employeesDsEmployee_InfoTableAdapter;
+        System.Windows.Data.CollectionViewSource employee_InfoViewSource;
+        Boolean is_delete_btn_clicked = false;
+
         private void main_window_Loaded(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+                employeesDsEmployee_InfoTableAdapter = new WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter();
+                employeesDsEmployee_InfoTableAdapter.Fill(employeesDs.Employee_Info);
 
-            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
-            WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter employeesDsEmployee_InfoTableAdapter = new WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter();
-            employeesDsEmployee_InfoTableAdapter.Fill(employeesDs.Employee_Info);
-            
-            System.Windows.Data.CollectionViewSource employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
-            employee_InfoViewSource.View.MoveCurrentToFirst();
-            this.employee_InfoDataGrid.ScrollIntoView(employee_InfoViewSource.View.CurrentItem);
+                employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
+                employee_InfoViewSource.View.MoveCurrentToFirst();
+                this.employee_InfoDataGrid.ScrollIntoView(employee_InfoViewSource.View.CurrentItem);
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
             this.save_btn.IsEnabled = false;
             this.save_btn.Opacity = 0.5;
@@ -45,8 +58,8 @@ namespace WpfDatabase
             this.group_box_left.IsEnabled = false;
             this.group_box_left.Opacity = 0.5;
             this.employee_InfoDataGrid.IsEnabled = true;
-            
         }
+
 
         void new_edit_del_btns()
         {
@@ -60,8 +73,18 @@ namespace WpfDatabase
             this.return_btn.IsEnabled = true;
             this.return_btn.Opacity = 1.0;
 
-            this.group_box_left.IsEnabled = true;
-            this.group_box_left.Opacity = 1.0;
+            if(is_delete_btn_clicked == true)
+            {
+                this.group_box_left.IsEnabled = false;
+                this.group_box_left.Opacity = 0.5;
+                is_delete_btn_clicked = false ;
+            }         
+            else
+            {
+                this.group_box_left.IsEnabled = true;
+                this.group_box_left.Opacity = 1.0;
+            }
+
             this.employee_InfoDataGrid.IsEnabled = false;
         }
 
@@ -87,60 +110,114 @@ namespace WpfDatabase
 
         private void new_btn_Click(object sender, RoutedEventArgs e)
         {
-            new_edit_del_btns();
+            try
+            {
+                new_edit_del_btns();
 
-            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+                //employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
 
-            System.Data.DataRow dr;
-            dr = employeesDs.Employee_Info.NewEmployee_InfoRow();
-            employeesDs.Employee_Info.Rows.Add(dr);
+                System.Data.DataRow dr;
+                dr = employeesDs.Employee_Info.NewEmployee_InfoRow();
+                employeesDs.Employee_Info.Rows.Add(dr);
 
-            System.Windows.Data.CollectionViewSource employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
-            employee_InfoViewSource.View.MoveCurrentToLast();
-            this.employee_InfoDataGrid.ScrollIntoView(employee_InfoViewSource.View.CurrentItem);
-
+                //employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
+                employee_InfoViewSource.View.MoveCurrentToLast();
+                this.employee_InfoDataGrid.ScrollIntoView(employee_InfoViewSource.View.CurrentItem);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void edit_btn_Click(object sender, RoutedEventArgs e)
         {
-            new_edit_del_btns();
+            try
+            {
+                //employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+                Int32 rc;
+                rc = employeesDs.Employee_Info.Rows.Count;
+                if(rc == 0)
+                {
+                    MessageBox.Show("Nothing to Edit", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                new_edit_del_btns();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            
         }
 
 
         private void delete_btn_Click(object sender, RoutedEventArgs e)
         {
-            new_edit_del_btns();
+            try
+            {
+                //employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+                Int32 rc;
+                rc = employeesDs.Employee_Info.Rows.Count;
+                if (rc == 0)
+                {
+                    MessageBox.Show("Nothing To Delete", "Message", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
 
-            System.Windows.Data.CollectionViewSource employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
-            System.Data.DataRowView drv;
-            drv = (System.Data.DataRowView)employee_InfoViewSource.View.CurrentItem;
+                is_delete_btn_clicked = true;
+                new_edit_del_btns();
 
-            drv.Delete();
+                //employee_InfoViewSource = ((System.Windows.Data.CollectionViewSource)(this.FindResource("employee_InfoViewSource")));
+                System.Data.DataRowView drv;
+                drv = (System.Data.DataRowView)employee_InfoViewSource.View.CurrentItem;
+
+                drv.Delete();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
 
         private void save_btn_Click(object sender, RoutedEventArgs e)
         {
-            save_return_btns();
+            try
+            {
+                save_return_btns();
 
-            WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter employeesDsEmployee_InfoTableAdapter = new WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter();
+                //employeesDsEmployee_InfoTableAdapter = new WpfDatabase.MainDs.EmployeesDsTableAdapters.Employee_InfoTableAdapter();
+                //employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
+                
+                Int32 rv;
+                rv = employeesDsEmployee_InfoTableAdapter.Update(employeesDs.Employee_Info); //(INSERT)
+                if (rv > 0)
+                    MessageBox.Show("Changed Saved to Database", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                else
+                    MessageBox.Show("Error Saving Data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
-            Int32 rv;
-            rv = employeesDsEmployee_InfoTableAdapter.Update(employeesDs.Employee_Info); //(INSERT)
-            if(rv > 0)
-                MessageBox.Show("Changed Saved to Database", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-            else
-                MessageBox.Show("Error Saving Data", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
 
         private void return_btn_Click(object sender, RoutedEventArgs e)
         {
-            save_return_btns();
-
-            WpfDatabase.MainDs.EmployeesDs employeesDs = ((WpfDatabase.MainDs.EmployeesDs)(this.FindResource("employeesDs")));
-            employeesDs.RejectChanges();
+            try
+            {
+                save_return_btns();
+                employeesDs.RejectChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
     }
+
 }
